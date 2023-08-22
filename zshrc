@@ -64,21 +64,21 @@ else
   function refresh { }
 fi
 
-fproj() {
+fzf-proj() {
   local dir
   dir=$(find /home/vnguyen/projects/*/repos -mindepth 1 -maxdepth 1 -type d -name "*$1*" | fzf +m) && cd "$dir"
 }
 
 # https://github.com/junegunn/fzf/wiki/examples
 
-fe() {
+fzf-edit() {
   local files
   IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
 # fd - cd to selected directory
-fd() {
+fzf-cd() {
   local dir
   dir=$(find -L ${1:-.} -path '*/\.*' -prune \
                   -o -type d -print 2> /dev/null | fzf +m) &&
@@ -86,13 +86,13 @@ fd() {
 }
 
 # fda - including hidden directories
-fda() {
+fzf-cd-all() {
   local dir
   dir=$(find -L ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
 # fdr - cd to selected parent directory
-fdr() {
+fzf-cd-parent() {
   local declare dirs=()
   get_parent_dirs() {
     if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi
@@ -109,7 +109,7 @@ fdr() {
 # cf - fuzzy cd from anywhere
 # ex: cf word1 word2 ... (even part of a file name)
 # zsh autoload function
-cf() {
+fzf-cd-locate() {
   local file
 
   file="$(locate -Ai -0 $@ | grep -z -vE '~$' | fzf --read0 -0 -1)"
@@ -126,14 +126,14 @@ cf() {
 }
 
 # cdf - cd into the directory of the selected file
-cdf() {
+fzf-cd-file() {
    local file
    local dir
    file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
 }
 
 # fkill - kill process
-fkill() {
+fzf-kill-ps() {
   local pid
   pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
 
@@ -144,7 +144,7 @@ fkill() {
 }
 
 # fbr - checkout git branch
-fbr() {
+fzf-git-checkout-branch() {
   local branches branch
   branches=$(git branch -vv) &&
   branch=$(echo "$branches" | fzf +m) &&
@@ -152,7 +152,7 @@ fbr() {
 }
 
 # fco - checkout git branch/tag
-fco() {
+fzf-git-checkout-ref() {
   local tags branches target
   tags=$(
     git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return
@@ -167,7 +167,7 @@ fco() {
 }
 
 # fcoc - checkout git commit
-fcoc() {
+fzf-git-checkout-commit() {
   local commits commit
   commits=$(git log --pretty=oneline --abbrev-commit --reverse) &&
   commit=$(echo "$commits" | fzf --tac +s +m -e) &&
@@ -175,7 +175,7 @@ fcoc() {
 }
 
 # fshow - git commit browser
-fshow() {
+fzf-git-commits() {
   git log --graph --color=always \
       --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
   fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
@@ -188,7 +188,7 @@ FZF-EOF"
 
 # fcs - get git commit sha
 # example usage: git rebase -i `fcs`
-fcs() {
+fzf-git-commit-hash() {
   echo -n "$(git log --oneline --graph --decorate --all --color=always | fzf --ansi --reverse | sed -E 's/[ |*]*([a-f0-9]+) .+/\1/g')"
 }
 
