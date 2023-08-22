@@ -1,0 +1,3 @@
+[submodule "tmux-jump"]
+	path = tmux-jump
+	url = git@github.com:schasse/tmux-jump.git

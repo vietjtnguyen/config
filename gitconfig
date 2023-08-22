@@ -1,0 +1,49 @@
+[user]
+	name = Viet T. Nguyen
+	email = vietjtnguyen@gmail.com
+[credential]
+	helper = cache --timeout=31556926
+[alias]
+	st = status
+	ci = commit
+	br = branch
+	co = checkout
+	df = diff --color
+	lg = log -p
+	ada = add --all .
+	cdf = diff --color --cached
+	who = shortlog -s --
+	nlog = log ORIG_HEAD.. --stat --no-merges
+	# show everything to this HEAD pretty
+	plog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	# show everything pretty
+	alog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	# show all branches pretty
+	blog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --branches
+	# show time pretty
+	tlog = log --pretty=format:'%ci %H %s'
+  # compact summary
+  slog = log --all --graph --decorate --compact-summary
+	justmerge = merge --no-ff --no-commit
+	jm = merge --no-ff --no-commit
+[core]
+	excludesfile = ~/.gitignore_global
+[push]
+	default = current
+[color]
+	ui = auto
+[rerere]
+	enabled = true
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+[pull]
+	ff = only
+[diff]
+	algorithm = histogram
+[init]
+	defaultBranch = main
+[merge]
+  #conflictStyle = zdiff3
